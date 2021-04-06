@@ -47,37 +47,38 @@ client.connect(err => {
             })
     })
 
-    app.get('/products/:id', (req, res) => {
-        productCollection.find({ _id: ObjectID(req.params.id) })
-            .toArray((err, documents) => {
-                res.send(documents[0])
-            })
-    })
-
-    app.patch('/update/:id', (req, res) => {
-        console.log(req.body);
-        productCollection.updateOne(
-            { _id: ObjectID(req.params.id) },
-            {
-                $set: {
-                    price: req.body.price,
-                    name: req.body.name,
-                    weight: req.body.weight
-                }
-            }
-        ).then(result => {
-            const { matchedCount, modifiedCount } = result;
-            if (matchedCount && modifiedCount) {
-                console.log(`Successfully updated the item.`)
-            }
-        }).catch(err => console.error(`Failed to update the item: ${err}`))
-    })
-
     app.delete('/delete/:id', (req, res) => {
         const id = ObjectID(req.params.id);
         productCollection.deleteOne({ _id: id })
             .then(result => res.send(result.deletedCount > 0))
     })
+
+    // app.get('/products/:id', (req, res) => {
+    //     productCollection.find({ _id: ObjectID(req.params.id) })
+    //         .toArray((err, documents) => {
+    //             res.send(documents[0])
+    //         })
+    // })
+
+    // app.patch('/update/:id', (req, res) => {
+    //     console.log(req.body);
+    //     productCollection.updateOne(
+    //         { _id: ObjectID(req.params.id) },
+    //         {
+    //             $set: {
+    //                 price: req.body.price,
+    //                 name: req.body.name,
+    //                 weight: req.body.weight
+    //             }
+    //         }
+    //     ).then(result => {
+    //         const { matchedCount, modifiedCount } = result;
+    //         if (matchedCount && modifiedCount) {
+    //             console.log(`Successfully updated the item.`)
+    //         }
+    //     }).catch(err => console.error(`Failed to update the item: ${err}`))
+    // })
+
 
     // client.close();
 });
